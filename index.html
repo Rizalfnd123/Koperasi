@@ -4,87 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koperasi Reethau - Panel Informasi Anggota</title>
+    <!-- Tailwind CSS v4 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen selection:bg-emerald-500 selection:text-white">
 
-    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+    <!-- Top Navigation Bar -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-xs">
         <div class="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-xl font-bold text-emerald-600 tracking-tight flex items-center gap-2">
-                    <span>🏢</span> Koperasi Reethau
-                </h1>
-                <p class="text-xs text-slate-400">Panel Informasi Transparansi Anggota</p>
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-600 text-white p-2 rounded-xl shadow-xs font-bold text-xl tracking-tight">
+                    🏛️
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-slate-900 tracking-tight leading-tight">
+                        Koperasi <span class="text-emerald-600">Reethau</span>
+                    </h1>
+                    <p class="text-[11px] font-medium text-slate-400">Portal Transparansi & Keuangan Anggota</p>
+                </div>
             </div>
-            
+            <a href="admin.html" class="text-xs font-semibold text-slate-600 hover:text-white bg-slate-100 hover:bg-slate-900 px-4 py-2.5 rounded-xl border border-slate-200/60 transition-all duration-200 shadow-xs flex items-center gap-1.5 group">
+                <span>🔒</span> Control Panel Admin
+            </a>
         </div>
     </nav>
 
-    <div class="container mx-auto p-4 max-w-6xl my-4">
+    <!-- Hero Jumbotron Section -->
+    <div class="bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white relative overflow-hidden shadow-md">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.12),transparent_45%)]"></div>
+        <div class="container mx-auto max-w-6xl px-4 py-10 relative z-10">
+            <span class="inline-flex items-center gap-1.5 bg-emerald-500/15 border border-emerald-400/30 text-emerald-400 text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Data Terintegrasi Real-time
+            </span>
+            <h2 class="text-2xl md:text-3xl font-black tracking-tight max-w-2xl leading-tight">
+                Kemudahan Memantau Simpanan & Pinjaman dalam Satu Genggaman.
+            </h2>
+            <p class="text-slate-400 text-xs md:text-sm mt-2 max-w-lg">
+                Komitmen kami dalam mengedepankan asas keterbukaan informasi finansial bagi seluruh ekosistem anggota koperasi.
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container mx-auto p-4 max-w-6xl -mt-6 relative z-20">
         
+        <!-- Stats Widgets Section -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white p-4 rounded-xl shadow-xs border border-slate-100">
-                <span class="text-xs font-semibold text-slate-400 uppercase">Total Anggota</span>
-                <h3 id="statAnggota" class="text-2xl font-bold text-slate-700 mt-1">0</h3>
+            <!-- Widget 1 -->
+            <div class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex items-center justify-between group hover:border-emerald-500/30 transition-all">
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kolektif Anggota</span>
+                    <h3 id="statAnggota" class="text-3xl font-black text-slate-800 mt-1">0</h3>
+                </div>
+                <div class="bg-slate-50 text-slate-500 w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold border border-slate-100 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
+                    👥
+                </div>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-xs border border-slate-100">
-                <span class="text-xs font-semibold text-slate-400 uppercase">Iuran Bulan Ini Lunas</span>
-                <h3 id="statIuran" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+            <!-- Widget 2 -->
+            <div class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex items-center justify-between group hover:border-emerald-500/30 transition-all">
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Iuran Lunas (Mei)</span>
+                    <h3 id="statIuran" class="text-3xl font-black text-emerald-600 mt-1">0</h3>
+                </div>
+                <div class="bg-slate-50 text-slate-500 w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold border border-slate-100 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
+                    ✅
+                </div>
             </div>
-            <div class="bg-white p-4 rounded-xl shadow-xs border border-slate-100">
-                <span class="text-xs font-semibold text-slate-400 uppercase">Total Outstanding Pinjaman</span>
-                <h3 id="statPinjaman" class="text-2xl font-bold text-amber-600 mt-1">Rp0</h3>
+            <!-- Widget 3 -->
+            <div class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex items-center justify-between group hover:border-amber-500/30 transition-all">
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Outstanding Pinjaman</span>
+                    <h3 id="statPinjaman" class="text-2xl font-black text-amber-600 mt-1.5">Rp0</h3>
+                </div>
+                <div class="bg-slate-50 text-slate-500 w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold border border-slate-100 group-hover:bg-amber-50 group-hover:text-amber-600 transition-colors">
+                    💰
+                </div>
             </div>
         </div>
 
+        <!-- Global Search Filter Bar -->
+        <div class="bg-white p-3 rounded-2xl shadow-xs border border-slate-200/60 mb-6 flex items-center gap-3">
+            <span class="text-slate-400 pl-2">🔍</span>
+            <input type="text" id="pencarianAnggota" oninput="filterCariAnggota()" placeholder="Ketik nama Anda untuk mencari status iuran & sisa pinjaman..." class="w-full bg-slate-50 text-sm border border-slate-200 rounded-xl px-4 py-2 focus:outline-none focus:border-emerald-500 focus:bg-white transition-all">
+        </div>
+
+        <!-- Grid Layout Tabulasi Data -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <div class="lg:col-span-7 bg-white p-5 rounded-2xl shadow-xs border border-slate-100">
-                <div class="mb-4">
-                    <h2 class="text-lg font-bold text-slate-800">Status Iuran Bulanan</h2>
-                    <p class="text-xs text-slate-400">Informasi pelunasan iuran wajib bulanan tiap anggota.</p>
+            <!-- SECTION LEFT: IURAN BULANAN -->
+            <div class="lg:col-span-7 bg-white p-6 rounded-3xl shadow-xs border border-slate-200/50">
+                <div class="mb-5 flex justify-between items-start">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-900 tracking-tight">Status Iuran Bulanan</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Riwayat pemenuhan kewajiban iuran wajib berkala.</p>
+                    </div>
+                    <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-md border border-emerald-100">6 Bulan Berjalan</span>
                 </div>
                 
-                <div class="overflow-x-auto rounded-xl border border-slate-100">
+                <div class="overflow-x-auto rounded-2xl border border-slate-100">
                     <table class="w-full text-left text-sm border-collapse">
                         <thead>
-                            <tr class="bg-slate-50/70 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
-                                <th class="p-3 pl-4">Nama Anggota</th>
-                                <th class="p-3 text-center">Mei</th>
-                                <th class="p-3 text-center">Jun</th>
-                                <th class="p-3 text-center">Jul</th>
-                                <th class="p-3 text-center">Agu</th>
-                                <th class="p-3 text-center">Sep</th>
-                                <th class="p-3 text-center">Okt</th>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold text-[11px] uppercase tracking-wider">
+                                <th class="p-3.5 pl-5">Nama Anggota</th>
+                                <th class="p-3.5 text-center">Mei</th>
+                                <th class="p-3.5 text-center">Jun</th>
+                                <th class="p-3.5 text-center">Jul</th>
+                                <th class="p-3.5 text-center">Agu</th>
+                                <th class="p-3.5 text-center">Sep</th>
+                                <th class="p-3.5 text-center">Okt</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelIuran" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="tabelIuran" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-xs border border-slate-100">
-                <div class="mb-4">
-                    <h2 class="text-lg font-bold text-slate-800">Data Pinjaman & Cicilan</h2>
-                    <p class="text-xs text-slate-400">Rekapitulasi sisa saldo pinjaman berjalan.</p>
+            <!-- SECTION RIGHT: PINJAMAN & CICILAN -->
+            <div class="lg:col-span-5 bg-white p-6 rounded-3xl shadow-xs border border-slate-200/50">
+                <div class="mb-5">
+                    <h2 class="text-lg font-extrabold text-slate-900 tracking-tight">Data Pinjaman & Cicilan</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Kalkulasi total penarikan pinjaman beserta sisa saldo berjalan.</p>
                 </div>
                 
-                <div class="overflow-x-auto rounded-xl border border-slate-100">
+                <div class="overflow-x-auto rounded-2xl border border-slate-100">
                     <table class="w-full text-left text-sm border-collapse">
                         <thead>
-                            <tr class="bg-slate-50/70 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
-                                <th class="p-3 pl-4">Nama</th>
-                                <th class="p-3 text-right">Pinjam</th>
-                                <th class="p-3 text-right">Sisa Saldo</th>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold text-[11px] uppercase tracking-wider">
+                                <th class="p-3.5 pl-5">Nama</th>
+                                <th class="p-3.5 text-right">Pinjam</th>
+                                <th class="p-3.5 text-right">Sisa Saldo</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelPinjaman" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="tabelPinjaman" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Script Logika Aplikasi -->
     <script>
         let dataKoperasi = JSON.parse(localStorage.getItem('dataKoperasi')) || { anggota: [], iuran: {}, pinjaman: {} };
         const bulanList = ['Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'];
@@ -96,12 +154,13 @@
             let lunasBulanIni = 0;
             const bulanSekarang = 'Mei';
 
+            // Render Tabel Iuran
             const tabelIuran = document.getElementById('tabelIuran');
-            tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400 text-xs">Belum ada data anggota.</td></tr>' : '';
+            tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-5 text-center text-slate-400 text-xs italic">Belum ada basis data anggota terdaftar.</td></tr>' : '';
             
             dataKoperasi.anggota.forEach(nama => {
-                let row = `<tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>`;
+                let row = `<tr class="data-baris-anggota hover:bg-slate-50/70 transition-colors" data-nama="${nama.toLowerCase()}">
+                    <td class="p-3.5 pl-5 font-bold text-slate-800">${nama}</td>`;
                 
                 bulanList.forEach(bulan => {
                     if (!dataKoperasi.iuran[nama]) dataKoperasi.iuran[nama] = {};
@@ -111,12 +170,12 @@
                     if(sudahBayar && bulan === bulanSekarang) lunasBulanIni++;
 
                     const badgeClass = sudahBayar 
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                        : 'bg-rose-50 text-rose-600 border border-rose-100';
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200/50 shadow-xs' 
+                        : 'bg-rose-50 text-rose-600 border-rose-100/60';
                     const badgeText = sudahBayar ? '✓ Lunas' : 'Belum';
                     
                     row += `<td class="p-2 text-center">
-                        <span class="inline-block text-[11px] px-2 py-0.5 rounded-full font-medium ${badgeClass}">
+                        <span class="inline-flex text-[10px] px-2.5 py-1 rounded-lg font-bold border transition-all ${badgeClass}">
                             ${badgeText}
                         </span>
                     </td>`;
@@ -125,24 +184,43 @@
                 tabelIuran.innerHTML += row;
             });
 
+            // Render Tabel Pinjaman
             const tabelPinjaman = document.getElementById('tabelPinjaman');
-            tabelPinjaman.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="3" class="p-4 text-center text-slate-400 text-xs">Belum ada data pinjaman.</td></tr>' : '';
+            tabelPinjaman.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="3" class="p-5 text-center text-slate-400 text-xs italic">Belum ada riwayat pinjaman aktif.</td></tr>' : '';
             
             dataKoperasi.anggota.forEach(nama => {
                 const p = dataKoperasi.pinjaman[nama] || { totalPinjam: 0, totalCicil: 0 };
                 const sisa = p.totalPinjam - p.totalCicil;
                 totalSisaPinjaman += sisa;
 
-                tabelPinjaman.innerHTML += `<tr class="hover:bg-slate-50/50 transition-colors">
-                    <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>
-                    <td class="p-3 text-right text-slate-400 text-xs">Rp${p.totalPinjam.toLocaleString()}</td>
-                    <td class="p-3 text-right font-semibold ${sisa > 0 ? 'text-amber-600' : 'text-slate-400'}">Rp${sisa.toLocaleString()}</td>
+                tabelPinjaman.innerHTML += `<tr class="data-baris-pinjaman hover:bg-slate-50/70 transition-colors" data-nama="${nama.toLowerCase()}">
+                    <td class="p-3.5 pl-5 font-bold text-slate-800">${nama}</td>
+                    <td class="p-3 text-right text-slate-400 text-xs font-mono">Rp${p.totalPinjam.toLocaleString()}</td>
+                    <td class="p-3 text-right font-bold font-mono ${sisa > 0 ? 'text-amber-600' : 'text-slate-400'}">Rp${sisa.toLocaleString()}</td>
                 </tr>`;
             });
 
             document.getElementById('statPinjaman').innerText = `Rp${totalSisaPinjaman.toLocaleString()}`;
             document.getElementById('statIuran').innerText = `${lunasBulanIni} Anggota`;
         }
+
+        // Fungsi interaktif pencarian real-time
+        function filterCariAnggota() {
+            const keyword = document.getElementById('pencarianAnggota').value.toLowerCase();
+            
+            // Filter tabel iuran
+            document.querySelectorAll('.data-baris-anggota').forEach(row => {
+                const nama = row.getAttribute('data-nama');
+                row.style.display = nama.includes(keyword) ? '' : 'none';
+            });
+
+            // Filter tabel pinjaman
+            document.querySelectorAll('.data-baris-pinjaman').forEach(row => {
+                const nama = row.getAttribute('data-nama');
+                row.style.display = nama.includes(keyword) ? '' : 'none';
+            });
+        }
+
         window.onload = renderUserView;
     </script>
 </body>
