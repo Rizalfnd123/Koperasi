@@ -50,16 +50,15 @@
                         <thead>
                             <tr class="bg-slate-50/70 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
                                 <th class="p-3 pl-4">Nama Anggota</th>
-                                <th class="p-3 text-center">Jan</th>
-                                <th class="p-3 text-center">Feb</th>
-                                <th class="p-3 text-center">Mar</th>
-                                <th class="p-3 text-center">Apr</th>
                                 <th class="p-3 text-center">Mei</th>
                                 <th class="p-3 text-center">Jun</th>
+                                <th class="p-3 text-center">Jul</th>
+                                <th class="p-3 text-center">Agu</th>
+                                <th class="p-3 text-center">Sep</th>
+                                <th class="p-3 text-center">Okt</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelIuran" class="divide-y divide-slate-100">
-                            </tbody>
+                        <tbody id="tabelIuran" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
@@ -79,8 +78,7 @@
                                 <th class="p-3 text-right">Sisa Saldo</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelPinjaman" class="divide-y divide-slate-100">
-                            </tbody>
+                        <tbody id="tabelPinjaman" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
@@ -89,67 +87,62 @@
 
     <script>
         let dataKoperasi = JSON.parse(localStorage.getItem('dataKoperasi')) || { anggota: [], iuran: {}, pinjaman: {} };
-        // Ganti daftar bulan agar dimulai dari Mei
-const bulanList = ['Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'];
+        const bulanList = ['Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'];
 
-function renderUserView() {
-    // Update Stats
-    document.getElementById('statAnggota').innerText = dataKoperasi.anggota.length;
-    
-    let totalSisaPinjaman = 0;
-    let lunasBulanIni = 0;
-    const bulanSekarang = 'Mei'; // Diubah ke Mei sebagai bulan berjalan saat ini
-
-    // Render Tabel Iuran
-    const tabelIuran = document.getElementById('tabelIuran');
-    tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400 text-xs">Belum ada data anggota.</td></tr>' : '';
-    
-    dataKoperasi.anggota.forEach(nama => {
-        let row = `<tr class="hover:bg-slate-50/50 transition-colors">
-            <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>`;
-        
-        bulanList.forEach(bulan => {
-            // Memastikan struktur data iuran bulan baru terbentuk jika belum ada
-            if (!dataKoperasi.iuran[nama]) dataKoperasi.iuran[nama] = {};
-            if (dataKoperasi.iuran[nama][bulan] === undefined) dataKoperasi.iuran[nama][bulan] = false;
-
-            const sudahBayar = dataKoperasi.iuran[nama][bulan];
-            if(sudahBayar && bulan === bulanSekarang) lunasBulanIni++;
-
-            const badgeClass = sudahBayar 
-                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                : 'bg-rose-50 text-rose-600 border border-rose-100';
-            const badgeText = sudahBayar ? '✓ Lunas' : 'Belum';
+        function renderUserView() {
+            document.getElementById('statAnggota').innerText = dataKoperasi.anggota.length;
             
-            row += `<td class="p-2 text-center">
-                <span class="inline-block text-[11px] px-2 py-0.5 rounded-full font-medium ${badgeClass}">
-                    ${badgeText}
-                </span>
-            </td>`;
-        });
-        row += `</tr>`;
-        tabelIuran.innerHTML += row;
-    });
+            let totalSisaPinjaman = 0;
+            let lunasBulanIni = 0;
+            const bulanSekarang = 'Mei';
 
-    // Render Tabel Pinjaman
-    const tabelPinjaman = document.getElementById('tabelPinjaman');
-    tabelPinjaman.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="3" class="p-4 text-center text-slate-400 text-xs">Belum ada data pinjaman.</td></tr>' : '';
-    
-    dataKoperasi.anggota.forEach(nama => {
-        const p = dataKoperasi.pinjaman[nama] || { totalPinjam: 0, totalCicil: 0 };
-        const sisa = p.totalPinjam - p.totalCicil;
-        totalSisaPinjaman += sisa;
+            const tabelIuran = document.getElementById('tabelIuran');
+            tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400 text-xs">Belum ada data anggota.</td></tr>' : '';
+            
+            dataKoperasi.anggota.forEach(nama => {
+                let row = `<tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>`;
+                
+                bulanList.forEach(bulan => {
+                    if (!dataKoperasi.iuran[nama]) dataKoperasi.iuran[nama] = {};
+                    if (dataKoperasi.iuran[nama][bulan] === undefined) dataKoperasi.iuran[nama][bulan] = false;
 
-        tabelPinjaman.innerHTML += `<tr class="hover:bg-slate-50/50 transition-colors">
-            <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>
-            <td class="p-3 text-right text-slate-400 text-xs">Rp${p.totalPinjam.toLocaleString()}</td>
-            <td class="p-3 text-right font-semibold ${sisa > 0 ? 'text-amber-600' : 'text-slate-400'}">Rp${sisa.toLocaleString()}</td>
-        </tr>`;
-    });
+                    const sudahBayar = dataKoperasi.iuran[nama][bulan];
+                    if(sudahBayar && bulan === bulanSekarang) lunasBulanIni++;
 
-    document.getElementById('statPinjaman').innerText = `Rp${totalSisaPinjaman.toLocaleString()}`;
-    document.getElementById('statIuran').innerText = `${lunasBulanIni} Anggota`;
-}
+                    const badgeClass = sudahBayar 
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                        : 'bg-rose-50 text-rose-600 border border-rose-100';
+                    const badgeText = sudahBayar ? '✓ Lunas' : 'Belum';
+                    
+                    row += `<td class="p-2 text-center">
+                        <span class="inline-block text-[11px] px-2 py-0.5 rounded-full font-medium ${badgeClass}">
+                            ${badgeText}
+                        </span>
+                    </td>`;
+                });
+                row += `</tr>`;
+                tabelIuran.innerHTML += row;
+            });
+
+            const tabelPinjaman = document.getElementById('tabelPinjaman');
+            tabelPinjaman.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="3" class="p-4 text-center text-slate-400 text-xs">Belum ada data pinjaman.</td></tr>' : '';
+            
+            dataKoperasi.anggota.forEach(nama => {
+                const p = dataKoperasi.pinjaman[nama] || { totalPinjam: 0, totalCicil: 0 };
+                const sisa = p.totalPinjam - p.totalCicil;
+                totalSisaPinjaman += sisa;
+
+                tabelPinjaman.innerHTML += `<tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>
+                    <td class="p-3 text-right text-slate-400 text-xs">Rp${p.totalPinjam.toLocaleString()}</td>
+                    <td class="p-3 text-right font-semibold ${sisa > 0 ? 'text-amber-600' : 'text-slate-400'}">Rp${sisa.toLocaleString()}</td>
+                </tr>`;
+            });
+
+            document.getElementById('statPinjaman').innerText = `Rp${totalSisaPinjaman.toLocaleString()}`;
+            document.getElementById('statIuran').innerText = `${lunasBulanIni} Anggota`;
+        }
         window.onload = renderUserView;
     </script>
 </body>
