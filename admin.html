@@ -137,6 +137,44 @@
             simpanDanRefresh();
         }
 
+        function editAnggota(namaLama) {
+            const namaBaru = prompt(`Ubah nama untuk "${namaLama}":`, namaLama);
+            if (namaBaru === null) return; // Batal
+            const namaClean = namaBaru.trim();
+            
+            if (!namaClean) return alert('Nama baru tidak boleh kosong.');
+            if (namaClean === namaLama) return; // Tidak ada perubahan
+            if (dataKoperasi.anggota.includes(namaClean)) return alert('Nama tersebut sudah terdaftar.');
+
+            // 1. Update di array anggota
+            const index = dataKoperasi.anggota.indexOf(namaLama);
+            if (index !== -1) {
+                dataKoperasi.anggota[index] = namaClean;
+            }
+
+            // 2. Pindahkan data objek iuran & pinjaman ke key nama baru
+            dataKoperasi.iuran[namaClean] = dataKoperasi.iuran[namaLama];
+            delete dataKoperasi.iuran[namaLama];
+
+            dataKoperasi.pinjaman[namaClean] = dataKoperasi.pinjaman[namaLama];
+            delete dataKoperasi.pinjaman[namaLama];
+
+            // 3. Catat di log perubahan nama
+            dataKoperasi.log.unshift(`Admin mengubah nama anggota dari "${namaLama}" menjadi "${namaClean}"`);
+
+            simpanDanRefresh();
+        }
+
+        function hapusAnggota(nama) {
+            if(confirm(`Apakah Anda yakin ingin menghapus seluruh data anggota atas nama "${nama}"?\nTindakan ini akan menghapus permanen catatan iuran dan sisa pinjamannya.`)) {
+                dataKoperasi.anggota = dataKoperasi.anggota.filter(n => n !== nama);
+                delete dataKoperasi.iuran[nama];
+                delete dataKoperasi.pinjaman[nama];
+                dataKoperasi.log.unshift(`Admin menghapus anggota bernama "${nama}"`);
+                simpanDanRefresh();
+            }
+        }
+
         function toggleIuran(nama, bulan) {
             if (!dataKoperasi.iuran[nama]) dataKoperasi.iuran[nama] = {};
             dataKoperasi.iuran[nama][bulan] = !dataKoperasi.iuran[nama][bulan];
@@ -168,15 +206,6 @@
             simpanDanRefresh();
         }
 
-        function hapusAnggota(nama) {
-            if(confirm(`Hapus seluruh data anggota atas nama "${nama}"?`)) {
-                dataKoperasi.anggota = dataKoperasi.anggota.filter(n => n !== nama);
-                delete dataKoperasi.iuran[nama];
-                delete dataKoperasi.pinjaman[nama];
-                simpanDanRefresh();
-            }
-        }
-
         function renderAdminView() {
             const selectPinjam = document.getElementById('pilihAnggotaPinjam');
             selectPinjam.innerHTML = '<option value="">-- Pilih Anggota --</option>';
@@ -191,7 +220,10 @@
                 let row = `<tr class="hover:bg-slate-50/70 transition-colors">
                     <td class="p-3 pl-4 font-semibold text-slate-700 flex justify-between items-center group">
                         <span>${nama}</span>
-                        <button onclick="hapusAnggota('${nama}')" class="text-rose-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 text-[10px] ml-2 transition-all cursor-pointer">❌ Hapus</button>
+                        <div class="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-all">
+                            <button onclick="editAnggota('${nama}')" class="text-amber-500 hover:text-amber-700 text-[10px] font-medium cursor-pointer">✏️ Edit</button>
+                            <button onclick="hapusAnggota('${nama}')" class="text-rose-400 hover:text-rose-600 text-[10px] font-medium cursor-pointer">❌ Hapus</button>
+                        </div>
                     </td>`;
                 
                 bulanList.forEach(bulan => {
