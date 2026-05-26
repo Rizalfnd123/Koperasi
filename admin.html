@@ -45,20 +45,17 @@
                 <div class="overflow-x-auto rounded-xl border border-slate-100">
                     <table class="w-full text-left text-sm border-collapse">
                         <thead>
-                            <thead>
-    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
-        <th class="p-3 pl-4">Nama</th>
-        <th class="p-3 text-center">Mei</th>
-        <th class="p-3 text-center">Jun</th>
-        <th class="p-3 text-center">Jul</th>
-        <th class="p-3 text-center">Agu</th>
-        <th class="p-3 text-center">Sep</th>
-        <th class="p-3 text-center">Okt</th>
-    </tr>
-</thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
+                                <th class="p-3 pl-4">Nama</th>
+                                <th class="p-3 text-center">Mei</th>
+                                <th class="p-3 text-center">Jun</th>
+                                <th class="p-3 text-center">Jul</th>
+                                <th class="p-3 text-center">Agu</th>
+                                <th class="p-3 text-center">Sep</th>
+                                <th class="p-3 text-center">Okt</th>
+                            </tr>
                         </thead>
-                        <tbody id="tabelIuranAdmin" class="divide-y divide-slate-100">
-                            </tbody>
+                        <tbody id="tabelIuranAdmin" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
@@ -75,13 +72,13 @@
                             <option value="">-- Pilih Anggota --</option>
                         </select>
                        <select id="bulanPinjam" class="bg-white border border-slate-200 rounded-lg px-2.5 py-2 text-xs focus:outline-amber-500">
-    <option value="Mei">Mei</option>
-    <option value="Jun">Juni</option>
-    <option value="Jul">Juli</option>
-    <option value="Agu">Agustus</option>
-    <option value="Sep">September</option>
-    <option value="Okt">Oktober</option>
-</select>
+                            <option value="Mei">Mei</option>
+                            <option value="Jun">Juni</option>
+                            <option value="Jul">Juli</option>
+                            <option value="Agu">Agustus</option>
+                            <option value="Sep">September</option>
+                            <option value="Okt">Oktober</option>
+                        </select>
                     </div>
                     <div class="grid grid-cols-2 gap-2.5 mb-3">
                         <div>
@@ -100,8 +97,7 @@
 
                 <div>
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Log Aktivitas Terakhir:</h3>
-                    <div id="logPinjaman" class="text-xs max-h-40 overflow-y-auto bg-slate-50 border border-slate-100 p-3 rounded-xl space-y-2">
-                        </div>
+                    <div id="logPinjaman" class="text-xs max-h-40 overflow-y-auto bg-slate-50 border border-slate-100 p-3 rounded-xl space-y-2"></div>
                 </div>
             </div>
         </div>
@@ -119,73 +115,125 @@
         let dataKoperasi = JSON.parse(localStorage.getItem('dataKoperasi')) || {
             anggota: [], iuran: {}, pinjaman: {}, log: []
         };
-        // Ganti daftar bulan agar dimulai dari Mei
-const bulanList = ['Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'];
+        const bulanList = ['Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt'];
 
-function tambahAnggota() {
-    const input = document.getElementById('namaAnggota');
-    const nama = input.value.trim();
-    if (!nama) return alert('Ketik nama anggotanya dulu, ya.');
-    if (dataKoperasi.anggota.includes(nama)) return alert('Nama ini sudah ada di daftar.');
+        function simpanDanRefresh() {
+            localStorage.setItem('dataKoperasi', JSON.stringify(dataKoperasi));
+            renderAdminView();
+        }
 
-    dataKoperasi.anggota.push(nama);
-    
-    // Inisialisasi iuran langsung menggunakan bulanList yang baru
-    dataKoperasi.iuran[nama] = {};
-    bulanList.forEach(b => { dataKoperasi.iuran[nama][b] = false; });
-    
-    dataKoperasi.pinjaman[nama] = { totalPinjam: 0, totalCicil: 0 };
-    
-    input.value = '';
-    simpanDanRefresh();
-}
+        function tambahAnggota() {
+            const input = document.getElementById('namaAnggota');
+            const nama = input.value.trim();
+            if (!nama) return alert('Ketik nama anggotanya dulu, ya.');
+            if (dataKoperasi.anggota.includes(nama)) return alert('Nama ini sudah ada di daftar.');
 
-function renderAdminView() {
-    // Dropdown Anggota
-    const selectPinjam = document.getElementById('pilihAnggotaPinjam');
-    selectPinjam.innerHTML = '<option value="">-- Pilih Anggota --</option>';
-    dataKoperasi.anggota.forEach(nama => {
-        selectPinjam.innerHTML += `<option value="${nama}">${nama}</option>`;
-    });
-
-    // Tabel Iuran Admin
-    const tabelIuran = document.getElementById('tabelIuranAdmin');
-    tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400 text-xs">Belum ada data anggota.</td></tr>' : '';
-    
-    dataKoperasi.anggota.forEach(nama => {
-        let row = `<tr class="hover:bg-slate-50/70 transition-colors">
-            <td class="p-3 pl-4 font-semibold text-slate-700 flex justify-between items-center group">
-                <span>${nama}</span>
-                <button onclick="hapusAnggota('${nama}')" class="text-rose-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 text-[10px] ml-2 transition-all cursor-pointer">❌ Hapus</button>
-            </td>`;
-        
-        bulanList.forEach(bulan => {
-            // Memastikan data bulan baru aman terbentuk
-            if (!dataKoperasi.iuran[nama]) dataKoperasi.iuran[nama] = {};
-            if (dataKoperasi.iuran[nama][bulan] === undefined) dataKoperasi.iuran[nama][bulan] = false;
-
-            const sudahBayar = dataKoperasi.iuran[nama][bulan];
-            const btnClass = sudahBayar ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-slate-100 text-slate-400 border-slate-200 hover:bg-rose-100 hover:text-rose-600';
-            const labelText = sudahBayar ? 'Lunas' : 'Belum';
+            dataKoperasi.anggota.push(nama);
+            dataKoperasi.iuran[nama] = {};
+            bulanList.forEach(b => { dataKoperasi.iuran[nama][b] = false; });
+            dataKoperasi.pinjaman[nama] = { totalPinjam: 0, totalCicil: 0 };
             
-            row += `<td class="p-1 text-center">
-                <button onclick="toggleIuran('${nama}', '${bulan}')" class="text-[10px] px-2 py-1 rounded-md font-bold transition-all w-12 border ${btnClass} cursor-pointer shadow-xs">
-                    ${labelText}
-                </button>
-            </td>`;
-        });
-        row += `</tr>`;
-        tabelIuran.innerHTML += row;
-    });
+            input.value = '';
+            simpanDanRefresh();
+        }
 
-    // Log
-    const logBox = document.getElementById('logPinjaman');
-    logBox.innerHTML = dataKoperasi.log.length === 0 ? '<span class="text-slate-400 italic">Belum ada jejak transaksi.</span>' : '';
-    dataKoperasi.log.forEach(item => {
-        logBox.innerHTML += `<div class="text-[11px] text-slate-600 border-b border-slate-100 pb-1 font-mono">• ${item}</div>`;
-    });
-}
-        
+        function toggleIuran(nama, bulan) {
+            if (!dataKoperasi.iuran[nama]) dataKoperasi.iuran[nama] = {};
+            dataKoperasi.iuran[nama][bulan] = !dataKoperasi.iuran[nama][bulan];
+            simpanDanRefresh();
+        }
+
+        function simpanTransaksiPinjaman() {
+            const nama = document.getElementById('pilihAnggotaPinjam').value;
+            const bulan = document.getElementById('bulanPinjam').value;
+            const pinjam = parseInt(document.getElementById('jumlahPinjam').value) || 0;
+            const cicil = parseInt(document.getElementById('jumlahCicil').value) || 0;
+
+            if (!nama) return alert('Silakan pilih anggota dahulu.');
+            if (pinjam <= 0 && cicil <= 0) return alert('Isi jumlah pinjaman atau cicilan dengan angka valid.');
+
+            if (!dataKoperasi.pinjaman[nama]) dataKoperasi.pinjaman[nama] = { totalPinjam: 0, totalCicil: 0 };
+
+            if (pinjam > 0) {
+                dataKoperasi.pinjaman[nama].totalPinjam += pinjam;
+                dataKoperasi.log.unshift(`${nama} meminjam Rp${pinjam.toLocaleString()} pada bulan ${bulan}`);
+            }
+            if (cicil > 0) {
+                dataKoperasi.pinjaman[nama].totalCicil += cicil;
+                dataKoperasi.log.unshift(`${nama} mengangsur Rp${cicil.toLocaleString()} di bulan ${bulan}`);
+            }
+
+            document.getElementById('jumlahPinjam').value = '';
+            document.getElementById('jumlahCicil').value = '';
+            simpanDanRefresh();
+        }
+
+        function hapusAnggota(nama) {
+            if(confirm(`Hapus seluruh data anggota atas nama "${nama}"?`)) {
+                dataKoperasi.anggota = dataKoperasi.anggota.filter(n => n !== nama);
+                delete dataKoperasi.iuran[nama];
+                delete dataKoperasi.pinjaman[nama];
+                simpanDanRefresh();
+            }
+        }
+
+        function renderAdminView() {
+            const selectPinjam = document.getElementById('pilihAnggotaPinjam');
+            selectPinjam.innerHTML = '<option value="">-- Pilih Anggota --</option>';
+            dataKoperasi.anggota.forEach(nama => {
+                selectPinjam.innerHTML += `<option value="${nama}">${nama}</option>`;
+            });
+
+            const tabelIuran = document.getElementById('tabelIuranAdmin');
+            tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400 text-xs">Belum ada data anggota.</td></tr>' : '';
+            
+            dataKoperasi.anggota.forEach(nama => {
+                let row = `<tr class="hover:bg-slate-50/70 transition-colors">
+                    <td class="p-3 pl-4 font-semibold text-slate-700 flex justify-between items-center group">
+                        <span>${nama}</span>
+                        <button onclick="hapusAnggota('${nama}')" class="text-rose-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 text-[10px] ml-2 transition-all cursor-pointer">❌ Hapus</button>
+                    </td>`;
+                
+                bulanList.forEach(bulan => {
+                    if (!dataKoperasi.iuran[nama]) dataKoperasi.iuran[nama] = {};
+                    if (dataKoperasi.iuran[nama][bulan] === undefined) dataKoperasi.iuran[nama][bulan] = false;
+
+                    const sudahBayar = dataKoperasi.iuran[nama][bulan];
+                    const btnClass = sudahBayar ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-slate-100 text-slate-400 border-slate-200 hover:bg-rose-100 hover:text-rose-600';
+                    const labelText = sudahBayar ? 'Lunas' : 'Belum';
+                    
+                    row += `<td class="p-1 text-center">
+                        <button onclick="toggleIuran('${nama}', '${bulan}')" class="text-[10px] px-2 py-1 rounded-md font-bold transition-all w-12 border ${btnClass} cursor-pointer shadow-xs">
+                            ${labelText}
+                        </button>
+                    </td>`;
+                });
+                row += `</tr>`;
+                tabelIuran.innerHTML += row;
+            });
+
+            const logBox = document.getElementById('logPinjaman');
+            logBox.innerHTML = dataKoperasi.log.length === 0 ? '<span class="text-slate-400 italic">Belum ada jejak transaksi.</span>' : '';
+            dataKoperasi.log.forEach(item => {
+                logBox.innerHTML += `<div class="text-[11px] text-slate-600 border-b border-slate-100 pb-1 font-mono">• ${item}</div>`;
+            });
+        }
+
+        function eksporData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataKoperasi, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", `koperasi_backup.json`);
+            dlAnchorElem.click();
+        }
+
+        function hapusSemua() {
+            if (confirm('Hapus seluruh database koperasi? Data akan hilang permanen.')) {
+                localStorage.removeItem('dataKoperasi');
+                dataKoperasi = { anggota: [], iuran: {}, pinjaman: {}, log: [] };
+                renderAdminView();
+            }
+        }
 
         window.onload = renderAdminView;
     </script>
