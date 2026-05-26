@@ -24,6 +24,7 @@
 
     <div class="container mx-auto p-4 max-w-6xl my-6">
         
+        <!-- Form Registrasi -->
         <div class="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 mb-6">
             <h2 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3">Registrasi Anggota Baru</h2>
             <div class="flex flex-wrap gap-3">
@@ -36,34 +37,60 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <div class="lg:col-span-7 bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60">
-                <div class="mb-4">
-                    <h2 class="text-base font-bold text-slate-800">Manajemen Iuran Bulanan</h2>
-                    <p class="text-xs text-slate-400">Klik tombol status untuk mengubah status pembayaran secara langsung.</p>
+            <!-- KOLOM KIRI: MANAJEMEN IURAN BULANAN -->
+            <div class="lg:col-span-7 bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60 flex flex-col gap-6">
+                <div>
+                    <div class="mb-4">
+                        <h2 class="text-base font-bold text-slate-800">Manajemen Iuran Bulanan</h2>
+                        <p class="text-xs text-slate-400">Klik tombol status untuk mengubah status pembayaran secara langsung.</p>
+                    </div>
+                    
+                    <div class="overflow-x-auto rounded-xl border border-slate-100">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
+                                    <th class="p-3 pl-4">Nama</th>
+                                    <th class="p-3 text-center">Mei</th>
+                                    <th class="p-3 text-center">Jun</th>
+                                    <th class="p-3 text-center">Jul</th>
+                                    <th class="p-3 text-center">Agu</th>
+                                    <th class="p-3 text-center">Sep</th>
+                                    <th class="p-3 text-center">Okt</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelIuranAdmin" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
                 </div>
-                
-                <div class="overflow-x-auto rounded-xl border border-slate-100">
-                    <table class="w-full text-left text-sm border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
-                                <th class="p-3 pl-4">Nama</th>
-                                <th class="p-3 text-center">Mei</th>
-                                <th class="p-3 text-center">Jun</th>
-                                <th class="p-3 text-center">Jul</th>
-                                <th class="p-3 text-center">Agu</th>
-                                <th class="p-3 text-center">Sep</th>
-                                <th class="p-3 text-center">Okt</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelIuranAdmin" class="divide-y divide-slate-100"></tbody>
-                    </table>
+
+                <!-- TABEL MANAJEMEN PINJAMAN (BISA EDIT LANGSUNG) -->
+                <div>
+                    <div class="mb-3">
+                        <h2 class="text-base font-bold text-slate-800">Daftar Saldo Pinjaman Berjalan</h2>
+                        <p class="text-xs text-slate-400">Gunakan tombol aksi untuk koreksi manual akumulasi total pinjaman/cicilan.</p>
+                    </div>
+                    <div class="overflow-x-auto rounded-xl border border-slate-100">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
+                                    <th class="p-3 pl-4">Nama</th>
+                                    <th class="p-3 text-right">Total Pinjam</th>
+                                    <th class="p-3 text-right">Total Cicil</th>
+                                    <th class="p-3 text-right">Sisa</th>
+                                    <th class="p-3 text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelKelolaPinjaman" class="divide-y divide-slate-100 text-xs"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
+            <!-- KOLOM KANAN: TRANSAKSI PINJAMAN BARU & LOG -->
             <div class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-xs border border-slate-200/60">
                 <div class="mb-4">
                     <h2 class="text-base font-bold text-slate-800">Transaksi Pinjaman & Cicilan</h2>
-                    <p class="text-xs text-slate-400">Input penambahan pinjaman atau penerimaan angsuran.</p>
+                    <p class="text-xs text-slate-400">Input penambahan pinjaman atau penerimaan angsuran rutin.</p>
                 </div>
                 
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm mb-4">
@@ -102,6 +129,7 @@
             </div>
         </div>
 
+        <!-- Bagian Footer Backup -->
         <div class="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-400">
             <p>💡 Pengingat: Rutin lakukan ekspor data sebagai file backup jika diperlukan komputer bersih-bersih cache.</p>
             <div class="flex gap-2">
@@ -139,34 +167,51 @@
 
         function editAnggota(namaLama) {
             const namaBaru = prompt(`Ubah nama untuk "${namaLama}":`, namaLama);
-            if (namaBaru === null) return; // Batal
+            if (namaBaru === null) return;
             const namaClean = namaBaru.trim();
             
             if (!namaClean) return alert('Nama baru tidak boleh kosong.');
-            if (namaClean === namaLama) return; // Tidak ada perubahan
+            if (namaClean === namaLama) return;
             if (dataKoperasi.anggota.includes(namaClean)) return alert('Nama tersebut sudah terdaftar.');
 
-            // 1. Update di array anggota
             const index = dataKoperasi.anggota.indexOf(namaLama);
-            if (index !== -1) {
-                dataKoperasi.anggota[index] = namaClean;
-            }
+            if (index !== -1) dataKoperasi.anggota[index] = namaClean;
 
-            // 2. Pindahkan data objek iuran & pinjaman ke key nama baru
             dataKoperasi.iuran[namaClean] = dataKoperasi.iuran[namaLama];
             delete dataKoperasi.iuran[namaLama];
 
             dataKoperasi.pinjaman[namaClean] = dataKoperasi.pinjaman[namaLama];
             delete dataKoperasi.pinjaman[namaLama];
 
-            // 3. Catat di log perubahan nama
             dataKoperasi.log.unshift(`Admin mengubah nama anggota dari "${namaLama}" menjadi "${namaClean}"`);
+            simpanDanRefresh();
+        }
 
+        // ================= FITUR EDIT BARU: KOREKSI DATA PINJAMAN ANGGOTA =================
+        function editDataPinjaman(nama) {
+            const p = dataKoperasi.pinjaman[nama] || { totalPinjam: 0, totalCicil: 0 };
+            
+            const pinjamBaru = prompt(`[KOREKSI] Masukkan total nominal PINJAMAN baru untuk ${nama}:`, p.totalPinjam);
+            if (pinjamBaru === null) return; // Batal
+            
+            const cicilBaru = prompt(`[KOREKSI] Masukkan total nominal CICILAN baru untuk ${nama}:`, p.totalCicil);
+            if (cicilBaru === null) return; // Batal
+
+            const angkaPinjam = parseInt(pinjamBaru) || 0;
+            const angkaCicil = parseInt(cicilBaru) || 0;
+
+            if (angkaPinjam < 0 || angkaCicil < 0) return alert('Nominal angka tidak boleh minus.');
+
+            // Simpan nilai baru hasil overwrite override manual
+            dataKoperasi.pinjaman[nama].totalPinjam = angkaPinjam;
+            dataKoperasi.pinjaman[nama].totalCicil = angkaCicil;
+
+            dataKoperasi.log.unshift(`Admin memodifikasi manual saldo ${nama} (Pinjam: Rp${angkaPinjam.toLocaleString()}, Cicil: Rp${angkaCicil.toLocaleString()})`);
             simpanDanRefresh();
         }
 
         function hapusAnggota(nama) {
-            if(confirm(`Apakah Anda yakin ingin menghapus seluruh data anggota atas nama "${nama}"?\nTindakan ini akan menghapus permanen catatan iuran dan sisa pinjamannya.`)) {
+            if(confirm(`Apakah Anda yakin ingin menghapus seluruh data anggota atas nama "${nama}"?\nTindakan ini akan menghapus catatan iuran dan saldo pinjamannya.`)) {
                 dataKoperasi.anggota = dataKoperasi.anggota.filter(n => n !== nama);
                 delete dataKoperasi.iuran[nama];
                 delete dataKoperasi.pinjaman[nama];
@@ -207,12 +252,14 @@
         }
 
         function renderAdminView() {
+            // Dropdown Anggota
             const selectPinjam = document.getElementById('pilihAnggotaPinjam');
             selectPinjam.innerHTML = '<option value="">-- Pilih Anggota --</option>';
             dataKoperasi.anggota.forEach(nama => {
                 selectPinjam.innerHTML += `<option value="${nama}">${nama}</option>`;
             });
 
+            // 1. Tabel Iuran Admin
             const tabelIuran = document.getElementById('tabelIuranAdmin');
             tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400 text-xs">Belum ada data anggota.</td></tr>' : '';
             
@@ -244,6 +291,28 @@
                 tabelIuran.innerHTML += row;
             });
 
+            // 2. Tabel Kelola Pinjaman (Bisa Edit Pinjaman)
+            const tabelKelolaPinjaman = document.getElementById('tabelKelolaPinjaman');
+            tabelKelolaPinjaman.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="5" class="p-4 text-center text-slate-400 italic">Belum ada data keuangan.</td></tr>' : '';
+
+            dataKoperasi.anggota.forEach(nama => {
+                const p = dataKoperasi.pinjaman[nama] || { totalPinjam: 0, totalCicil: 0 };
+                const sisa = p.totalPinjam - p.totalCicil;
+
+                tabelKelolaPinjaman.innerHTML += `<tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-2.5 pl-4 font-medium text-slate-700">${nama}</td>
+                    <td class="p-2.5 text-right text-red-600">Rp${p.totalPinjam.toLocaleString()}</td>
+                    <td class="p-2.5 text-right text-emerald-600">Rp${p.totalCicil.toLocaleString()}</td>
+                    <td class="p-2.5 text-right font-bold ${sisa > 0 ? 'text-amber-600' : 'text-slate-400'}">Rp${sisa.toLocaleString()}</td>
+                    <td class="p-2.5 text-center">
+                        <button onclick="editDataPinjaman('${nama}')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 font-semibold px-2 py-0.5 rounded border border-amber-200 text-[10px] transition-all cursor-pointer">
+                            📝 Edit Saldo
+                        </button>
+                    </td>
+                </tr>`;
+            });
+
+            // 3. Log
             const logBox = document.getElementById('logPinjaman');
             logBox.innerHTML = dataKoperasi.log.length === 0 ? '<span class="text-slate-400 italic">Belum ada jejak transaksi.</span>' : '';
             dataKoperasi.log.forEach(item => {
