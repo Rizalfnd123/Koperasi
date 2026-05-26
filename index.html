@@ -1,278 +1,154 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pencatatan Koperasi Sederhana</title>
-    <!-- Menggunakan Tailwind CSS via CDN -->
+    <title>Koperasi Digital - Panel Informasi Anggota</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
 
-<body class="bg-gray-100 text-gray-800 font-sans">
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-xs">
+        <div class="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold text-emerald-600 tracking-tight flex items-center gap-2">
+                    <span>🏢</span> Koperasi Digital
+                </h1>
+                <p class="text-xs text-slate-400">Panel Informasi Transparansi Anggota</p>
+            </div>
+            <a href="admin.html" class="text-xs font-semibold text-slate-500 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-50 px-3 py-2 rounded-lg transition-all flex items-center gap-1">
+                🔒 Kelola Data (Admin)
+            </a>
+        </div>
+    </nav>
 
-    <div class="container mx-auto p-4 max-w-6xl">
-        <header class="mb-6 text-center">
-            <h1 class="text-3xl font-bold text-emerald-600">Koperasi Digital Statis</h1>
-            <p class="text-gray-500 text-sm">Pencatatan Simpanan & Pinjaman Anggota</p>
-        </header>
-
-        <!-- Form Tambah Anggota -->
-        <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
-            <h2 class="text-lg font-semibold mb-3 text-gray-700">Tambah Anggota Baru</h2>
-            <div class="flex flex-wrap gap-3">
-                <input type="text" id="namaAnggota" placeholder="Nama Anggota"
-                    class="flex-1 min-w-[200px] border border-gray-300 rounded px-3 py-2 text-sm focus:outline-emerald-500">
-                <button onclick="tambahAnggota()"
-                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm font-medium transition">
-                    + Tambah
-                </button>
+    <div class="container mx-auto p-4 max-w-6xl my-4">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-xl shadow-xs border border-slate-100">
+                <span class="text-xs font-semibold text-slate-400 uppercase">Total Anggota</span>
+                <h3 id="statAnggota" class="text-2xl font-bold text-slate-700 mt-1">0</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-xs border border-slate-100">
+                <span class="text-xs font-semibold text-slate-400 uppercase">Iuran Bulan Ini Lunas</span>
+                <h3 id="statIuran" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-xs border border-slate-100">
+                <span class="text-xs font-semibold text-slate-400 uppercase">Total Outstanding Pinjaman</span>
+                <h3 id="statPinjaman" class="text-2xl font-bold text-amber-600 mt-1">Rp0</h3>
             </div>
         </div>
 
-        <!-- Grid Konten Utama -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-            <!-- SEKSI 1: IURAN BULANAN -->
-            <div class="bg-white p-4 rounded-lg shadow-sm">
-                <h2 class="text-xl font-bold mb-4 text-emerald-700 border-b pb-2">✓ Status Iuran Bulanan</h2>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <div class="lg:col-span-7 bg-white p-5 rounded-2xl shadow-xs border border-slate-100">
+                <div class="mb-4">
+                    <h2 class="text-lg font-bold text-slate-800">Status Iuran Bulanan</h2>
+                    <p class="text-xs text-slate-400">Informasi pelunasan iuran wajib bulanan tiap anggota.</p>
+                </div>
+                
+                <div class="overflow-x-auto rounded-xl border border-slate-100">
+                    <table class="w-full text-left text-sm border-collapse">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-200">
-                                <th class="p-2">Nama</th>
-                                <th class="p-2 text-center">Jan</th>
-                                <th class="p-2 text-center">Feb</th>
-                                <th class="p-2 text-center">Mar</th>
-                                <th class="p-2 text-center">Apr</th>
-                                <th class="p-2 text-center">Mei</th>
-                                <th class="p-2 text-center">Jun</th>
+                            <tr class="bg-slate-50/70 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
+                                <th class="p-3 pl-4">Nama Anggota</th>
+                                <th class="p-3 text-center">Jan</th>
+                                <th class="p-3 text-center">Feb</th>
+                                <th class="p-3 text-center">Mar</th>
+                                <th class="p-3 text-center">Apr</th>
+                                <th class="p-3 text-center">Mei</th>
+                                <th class="p-3 text-center">Jun</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelIuran">
-                            <!-- Data iuran akan muncul di sini via JS -->
-                        </tbody>
+                        <tbody id="tabelIuran" class="divide-y divide-slate-100">
+                            </tbody>
                     </table>
                 </div>
-                <p class="text-xs text-gray-400 mt-3">*Klik kotak untuk mengubah status (Hijau = Sudah Bayar, Merah =
-                    Belum)</p>
             </div>
 
-            <!-- SEKSI 2: PINJAMAN & CICILAN -->
-            <div class="bg-white p-4 rounded-lg shadow-sm">
-                <h2 class="text-xl font-bold mb-4 text-amber-700 border-b pb-2">💵 Data Pinjaman & Cicilan</h2>
-
-                <!-- Form Input Pinjaman -->
-                <div class="bg-amber-50 p-3 rounded mb-4 text-sm">
-                    <h3 class="font-semibold text-amber-900 mb-2">Input Pinjaman Baru / Cicilan</h3>
-                    <div class="grid grid-cols-2 gap-2 mb-2">
-                        <select id="pilihAnggotaPinjam"
-                            class="border border-gray-300 bg-white rounded px-2 py-1.5 focus:outline-amber-500">
-                            <option value="">-- Pilih Anggota --</option>
-                        </select>
-                        <select id="bulanPinjam"
-                            class="border border-gray-300 bg-white rounded px-2 py-1.5 focus:outline-amber-500">
-                            <option value="Jan">Januari</option>
-                            <option value="Feb">Februari</option>
-                            <option value="Mar">Maret</option>
-                            <option value="Apr">April</option>
-                            <option value="Mei">Mei</option>
-                            <option value="Jun">Juni</option>
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 mb-2">
-                        <input type="number" id="jumlahPinjam" placeholder="Jumlah Pinjam (Rp)"
-                            class="border border-gray-300 rounded px-2 py-1.5 focus:outline-amber-500">
-                        <input type="number" id="jumlahCicil" placeholder="Bayar Cicilan (Rp)"
-                            class="border border-gray-300 rounded px-2 py-1.5 focus:outline-amber-500">
-                    </div>
-                    <button onclick="simpanTransaksiPinjaman()"
-                        class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-1.5 rounded transition text-xs">
-                        Simpan Transaksi Pinjaman
-                    </button>
+            <div class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-xs border border-slate-100">
+                <div class="mb-4">
+                    <h2 class="text-lg font-bold text-slate-800">Data Pinjaman & Cicilan</h2>
+                    <p class="text-xs text-slate-400">Rekapitulasi sisa saldo pinjaman berjalan.</p>
                 </div>
-
-                <!-- Tabel Rekap Pinjaman -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
+                
+                <div class="overflow-x-auto rounded-xl border border-slate-100">
+                    <table class="w-full text-left text-sm border-collapse">
                         <thead>
-                            <tr class="bg-gray-50 border-b border-gray-200">
-                                <th class="p-2">Nama</th>
-                                <th class="p-2 text-right">Total Pinjam</th>
-                                <th class="p-2 text-right">Total Dicicil</th>
-                                <th class="p-2 text-right">Sisa</th>
+                            <tr class="bg-slate-50/70 border-b border-slate-200 text-slate-500 font-semibold text-xs uppercase">
+                                <th class="p-3 pl-4">Nama</th>
+                                <th class="p-3 text-right">Pinjam</th>
+                                <th class="p-3 text-right">Sisa Saldo</th>
                             </tr>
                         </thead>
-                        <tbody id="tabelPinjaman">
-                            <!-- Data pinjaman akan muncul di sini via JS -->
-                        </tbody>
+                        <tbody id="tabelPinjaman" class="divide-y divide-slate-100">
+                            </tbody>
                     </table>
                 </div>
-
-                <!-- Log Riwayat Transaksi -->
-                <div class="mt-4">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Riwayat Cicilan &
-                        Pinjaman:</h4>
-                    <div id="logPinjaman"
-                        class="text-xs max-h-32 overflow-y-auto bg-gray-50 p-2 rounded border border-gray-100 space-y-1">
-                        <!-- Log transaksi -->
-                    </div>
-                </div>
-
             </div>
-        </div>
-
-        <!-- Tombol Aksi Data (Backup) -->
-        <div class="mt-6 flex justify-end gap-2 text-xs">
-            <button onclick="eksporData()"
-                class="text-gray-600 bg-gray-200 hover:bg-gray-300 px-3 py-1.5 rounded">Ekspor JSON (Backup
-                Data)</button>
-            <button onclick="hapusSemua()" class="text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded">Reset
-                Semua Data</button>
         </div>
     </div>
 
-    <!-- LOGIKA JAVASCRIPT -->
     <script>
-        // Struktur data default
-        let dataKoperasi = JSON.parse(localStorage.getItem('dataKoperasi')) || {
-            anggota: [],
-            iuran: {},      // format: { nama: { Jan: true, Feb: false } }
-            pinjaman: {},   // format: { nama: { totalPinjam: 0, totalCicil: 0 } }
-            log: []         // riwayat transaksi
-        };
-
+        let dataKoperasi = JSON.parse(localStorage.getItem('dataKoperasi')) || { anggota: [], iuran: {}, pinjaman: {} };
         const bulanList = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
 
-        function simpanKeLocalStorage() {
-            localStorage.setItem('dataKoperasi', JSON.stringify(dataKoperasi));
-            renderSemua();
-        }
+        function renderUserView() {
+            // Update Stats
+            document.getElementById('statAnggota').innerText = dataKoperasi.anggota.length;
+            
+            let totalSisaPinjaman = 0;
+            let lunasBulanIni = 0;
+            const bulanSekarang = 'Jan'; // Bisa dinamis, contoh default Jan
 
-        function tambahAnggota() {
-            const input = document.getElementById('namaAnggota');
-            const nama = input.value.trim();
-            if (!nama) return alert('Nama tidak boleh kosong');
-            if (dataKoperasi.anggota.includes(nama)) return alert('Nama sudah terdaftar');
-
-            dataKoperasi.anggota.push(nama);
-            dataKoperasi.iuran[nama] = { Jan: false, Feb: false, Mar: false, Apr: false, Mei: false, Jun: false };
-            dataKoperasi.pinjaman[nama] = { totalPinjam: 0, totalCicil: 0 };
-
-            input.value = '';
-            simpanKeLocalStorage();
-        }
-
-        function toggleIuran(nama, bulan) {
-            dataKoperasi.iuran[nama][bulan] = !dataKoperasi.iuran[nama][bulan];
-            simpanKeLocalStorage();
-        }
-
-        function simpanTransaksiPinjaman() {
-            const nama = document.getElementById('pilihAnggotaPinjam').value;
-            const bulan = document.getElementById('bulanPinjam').value;
-            const pinjam = parseInt(document.getElementById('jumlahPinjam').value) || 0;
-            const cicil = parseInt(document.getElementById('jumlahCicil').value) || 0;
-
-            if (!nama) return alert('Pilih anggota terlebih dahulu');
-            if (pinjam <= 0 && cicil <= 0) return alert('Masukkan nominal pinjam atau cicil');
-
-            if (pinjam > 0) {
-                dataKoperasi.pinjaman[nama].totalPinjam += pinjam;
-                dataKoperasi.log.unshift(`${nama} meminjam Rp${pinjam.toLocaleString()} pada bulan ${bulan}`);
-            }
-            if (cicil > 0) {
-                dataKoperasi.pinjaman[nama].totalCicil += cicil;
-                dataKoperasi.log.unshift(`${nama} mencicil Rp${cicil.toLocaleString()} pada bulan ${bulan}`);
-            }
-
-            // Reset form input khusus angka
-            document.getElementById('jumlahPinjam').value = '';
-            document.getElementById('jumlahCicil').value = '';
-            simpanKeLocalStorage();
-        }
-
-        function renderSemua() {
-            // 1. Render Dropdown Anggota
-            const selectPinjam = document.getElementById('pilihAnggotaPinjam');
-            selectPinjam.innerHTML = '<option value="">-- Pilih Anggota --</option>';
-            dataKoperasi.anggota.forEach(nama => {
-                selectPinjam.innerHTML += `<option value="${nama}">${nama}</option>`;
-            });
-
-            // 2. Render Tabel Iuran Bulanan
+            // Render Tabel Iuran
             const tabelIuran = document.getElementById('tabelIuran');
-            tabelIuran.innerHTML = '';
+            tabelIuran.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="7" class="p-4 text-center text-slate-400 text-xs">Belum ada data anggota.</td></tr>' : '';
+            
             dataKoperasi.anggota.forEach(nama => {
-                let row = `<tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="p-2 font-medium">${nama}</td>`;
-
+                let row = `<tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>`;
+                
                 bulanList.forEach(bulan => {
-                    const sudahBayar = dataKoperasi.iuran[nama][bulan];
-                    const warnaStatus = sudahBayar ? 'bg-emerald-500 text-white' : 'bg-red-100 text-red-700';
-                    const teksStatus = sudahBayar ? 'Lunas' : 'Belum';
+                    const sudahBayar = dataKoperasi.iuran[nama]?.[bulan];
+                    if(sudahBayar && bulan === bulanSekarang) lunasBulanIni++;
 
-                    row += `<td class="p-1 text-center">
-                        <button onclick="toggleIuran('${nama}', '${bulan}')" class="text-xs px-2 py-1 rounded font-semibold cursor-pointer w-14 ${warnaStatus}">
-                            ${teksStatus}
-                        </button>
+                    const badgeClass = sudahBayar 
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                        : 'bg-rose-50 text-rose-600 border border-rose-100';
+                    const badgeText = sudahBayar ? '✓ Lunas' : 'Belum';
+                    
+                    row += `<td class="p-2 text-center">
+                        <span class="inline-block text-[11px] px-2 py-0.5 rounded-full font-medium ${badgeClass}">
+                            ${badgeText}
+                        </span>
                     </td>`;
                 });
                 row += `</tr>`;
                 tabelIuran.innerHTML += row;
             });
 
-            // 3. Render Tabel Pinjaman
+            // Render Tabel Pinjaman
             const tabelPinjaman = document.getElementById('tabelPinjaman');
-            tabelPinjaman.innerHTML = '';
+            tabelPinjaman.innerHTML = dataKoperasi.anggota.length === 0 ? '<tr><td colspan="3" class="p-4 text-center text-slate-400 text-xs">Belum ada data pinjaman.</td></tr>' : '';
+            
             dataKoperasi.anggota.forEach(nama => {
-                const p = dataKoperasi.pinjaman[nama];
+                const p = dataKoperasi.pinjaman[nama] || { totalPinjam: 0, totalCicil: 0 };
                 const sisa = p.totalPinjam - p.totalCicil;
-                tabelPinjaman.innerHTML += `<tr class="border-b border-gray-100 hover:bg-gray-50">
-                    <td class="p-2 font-medium">${nama}</td>
-                    <td class="p-2 text-right text-red-600">Rp${p.totalPinjam.toLocaleString()}</td>
-                    <td class="p-2 text-right text-emerald-600">Rp${p.totalCicil.toLocaleString()}</td>
-                    <td class="p-2 text-right font-bold ${sisa > 0 ? 'text-amber-600' : 'text-gray-400'}">Rp${sisa.toLocaleString()}</td>
+                totalSisaPinjaman += sisa;
+
+                tabelPinjaman.innerHTML += `<tr class="hover:bg-slate-50/50 transition-colors">
+                    <td class="p-3 pl-4 font-medium text-slate-700">${nama}</td>
+                    <td class="p-3 text-right text-slate-400 text-xs">Rp${p.totalPinjam.toLocaleString()}</td>
+                    <td class="p-3 text-right font-semibold ${sisa > 0 ? 'text-amber-600' : 'text-slate-400'}">Rp${sisa.toLocaleString()}</td>
                 </tr>`;
             });
 
-            // 4. Render Log Riwayat
-            const logBox = document.getElementById('logPinjaman');
-            logBox.innerHTML = dataKoperasi.log.length === 0 ? '<span class="text-gray-400">Belum ada transaksi.</span>' : '';
-            dataKoperasi.log.forEach(item => {
-                logBox.innerHTML += `<div class="border-b border-gray-100 pb-1 text-gray-600">• ${item}</div>`;
-            });
+            document.getElementById('statPinjaman').innerText = `Rp${totalSisaPinjaman.toLocaleString()}`;
+            document.getElementById('statIuran').innerText = `${lunasBulanIni} Anggota`;
         }
 
-        function eksporData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataKoperasi, null, 2));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", `backup_koperasi_${new Date().toISOString().slice(0, 10)}.json`);
-            dlAnchorElem.click();
-        }
-
-        function removeDataAnggota(nama) {
-            if (confirm(`Hapus data ${nama}?`)) {
-                dataKoperasi.anggota = dataKoperasi.anggota.filter(n => n !== nama);
-                delete dataKoperasi.iuran[nama];
-                delete dataKoperasi.pinjaman[nama];
-                simpanKeLocalStorage();
-            }
-        }
-
-        function hapusSemua() {
-            if (confirm('Apakah Anda yakin ingin menghapus seluruh data koperasi? Tindakan ini tidak bisa dibatalkan.')) {
-                localStorage.removeItem('dataKoperasi');
-                dataKoperasi = { anggota: [], iuran: {}, pinjaman: {}, log: [] };
-                renderSemua();
-            }
-        }
-
-        // Jalankan render pertama kali saat halaman dimuat
-        renderSemua();
+        window.onload = renderUserView;
     </script>
 </body>
-
 </html>
